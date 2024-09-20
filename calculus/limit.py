@@ -56,3 +56,48 @@ class Limit1(Scene):
         self.play(Write(integration))
         self.play(Write(arrow_to_diff), Write(arrow_to_integ))
         self.wait()
+
+
+class LinearFunction(Scene):
+    def construct(self):
+        axes = Axes(
+            x_range=[-5, 5],
+            y_range=[-5, 5],
+            x_length=7,
+            y_length=7,
+            axis_config={"color": DARK_BLUE},
+            x_axis_config={
+                "numbers_to_include": np.arange(-5, 6, 2),
+                "numbers_with_elongated_ticks": np.arange(-5, 6, 2),
+            },
+            tips=False,
+        ).shift(3*RIGHT)
+
+        # Create the function y = x - 1
+        linear_function_plot = axes.plot(
+            lambda x: x - 1,
+            color=RED,
+            x_range=[-3.5, 5]
+        )
+
+        function_equation = MathTex(r"y = f(x) = x - 1", substrings_to_isolate=["x","y"]).to_edge(UL).shift(DOWN + RIGHT)
+        function_equation.set_color_by_tex("x", BLUE)
+        function_equation.set_color_by_tex("y", YELLOW)
+
+        # Add labels for the axes
+        axes_labels = axes.get_axis_labels(
+            x_label="x",
+            y_label="y"
+        )
+
+        # Add everything to the scene
+        self.play(Create(axes), Write(axes_labels))
+        self.wait()
+
+        self.play(Write(function_equation))
+        self.wait()
+
+        self.play(Create(linear_function_plot))
+        self.wait()
+
+        # self.add(axes, linear_function, axes_labels)
